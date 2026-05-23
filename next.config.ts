@@ -1,7 +1,10 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  // Both `better-sqlite3` and `sharp` ship native bindings that must be
+  // loaded server-side rather than bundled. Keeping them external avoids
+  // the turbopack "Could not locate the bindings file" error in dev.
+  serverExternalPackages: ['better-sqlite3', 'sharp'],
+}
 
-export default nextConfig;
+export default nextConfig
