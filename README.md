@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hoshi
 
-## Getting Started
+> A local self-hosted photo library. Point it at a folder, get a fast
+> timeline grouped by the date each photo was taken, search by filename,
+> and organize into albums. Inspired by Immich, re-implemented from scratch.
 
-First, run the development server:
+Hoshi closes a five-project portfolio series alongside
+[Akari](https://github.com/) (AI chat),
+[Origami](https://github.com/) (chatbot flow builder),
+[Kioku](https://github.com/) (local AI notes), and
+[Toki](https://github.com/) (scheduling).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- **Index a folder** of `.jpg / .jpeg / .png / .webp / .heic` images.
+  Originals stay where they are — Hoshi never modifies them.
+- **Day-grouped timeline** using EXIF `DateTimeOriginal`, falling back to
+  the file's mtime when EXIF is missing.
+- **Sharp-powered thumbnails** cached on disk under `.hoshi-thumbs/`.
+- **Photo detail** view with EXIF (camera, lens, exposure) and metadata.
+- **Albums** — manual grouping with arbitrary photos.
+- **Search** by filename or album name.
+- **SHA-256 dedup** — re-scanning is idempotent.
+
+## Stack
+
+- Next.js 16 App Router + React 19.2 + Tailwind 4
+- TypeScript strict, Biome (lint + format), Vitest (unit), Playwright (e2e)
+- SQLite via better-sqlite3 + Drizzle ORM
+- `sharp` for thumbnails, `exifr` for EXIF
+- Zod for runtime validation
+
+## Quick start
+
+```sh
+cp .env.example .env.local
+pnpm install
+pnpm db:generate
+pnpm seed:photos       # optional — drops a few sample JPEGs into ./photos
+pnpm dev --port 3500
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open <http://localhost:3500>, click **"スキャン"** to index the library.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To point at your own photo collection, edit `HOSHI_LIBRARY_ROOT` in
+`.env.local` (absolute paths work).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Security note
 
-## Learn More
+Hoshi is intended for **local, single-user** use. There is no
+authentication; anyone with access to the dev server can browse every
+photo in your library root. Do not deploy this to the public internet
+as-is.
 
-To learn more about Next.js, take a look at the following resources:
+Hoshi accesses the file system through a single guarded helper that
+rejects paths outside the configured library root; clients cannot ask the
+server to read arbitrary paths.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT — see [LICENSE](LICENSE).
