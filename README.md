@@ -2,13 +2,7 @@
 
 > A local self-hosted photo library. Point it at a folder, get a fast
 > timeline grouped by the date each photo was taken, search by filename,
-> and organize into albums. Inspired by Immich, re-implemented from scratch.
-
-Hoshi closes a five-project portfolio series alongside
-[Akari](https://github.com/) (AI chat),
-[Origami](https://github.com/) (chatbot flow builder),
-[Kioku](https://github.com/) (local AI notes), and
-[Toki](https://github.com/) (scheduling).
+> and organize into albums.
 
 ## Features
 
